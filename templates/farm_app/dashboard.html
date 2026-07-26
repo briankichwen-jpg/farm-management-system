@@ -1,0 +1,93 @@
+{% extends 'farm_app/base.html' %}
+
+{% block title %}Dashboard - Farm Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1>Welcome, {{ user.first_name }}!</h1>
+        <p class="text-muted">
+            <i class="far fa-calendar"></i> {{ current_date|date:"l, F d, Y - H:i" }}
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Crops</h6>
+                <h2 class="mb-0">{{ total_crops }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Livestock</h6>
+                <h2 class="mb-0">{{ total_livestock }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Income</h6>
+                <h2 class="mb-0">KSh {{ total_income|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Profit</h6>
+                <h2 class="mb-0 {% if total_profit >= 0 %}text-success{% else %}text-danger{% endif %}">
+                    KSh {{ total_profit|floatformat:2 }}
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Total Expenses</h6>
+                <h3 class="text-danger">KSh {{ total_expenses|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title text-muted">Farm Information</h6>
+                <p>
+                    <strong>Farm Name:</strong> {{ farmer.farm_name|default:"Not specified" }}<br>
+                    <strong>Location:</strong> {{ farmer.location|default:"Not specified" }}<br>
+                    <strong>Farm Size:</strong> {{ farmer.farm_size|default:"0" }} hectares
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a href="{% url 'crop_create' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Crop
+            </a>
+            <a href="{% url 'livestock_create' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Livestock
+            </a>
+            <a href="{% url 'inventory_create' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Inventory
+            </a>
+            <a href="{% url 'farming_plan_create' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Create Plan
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
