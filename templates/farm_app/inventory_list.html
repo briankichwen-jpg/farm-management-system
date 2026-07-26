@@ -1,0 +1,57 @@
+{% extends 'farm_app/base.html' %}
+
+{% block title %}Inventory - Farm Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Inventory</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'inventory_create' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Item
+        </a>
+    </div>
+</div>
+
+{% if inventory %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Item Type</th>
+                    <th>Name</th>
+                    <th>Current Stock</th>
+                    <th>Unit</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventory %}
+                    <tr>
+                        <td>{{ item.get_item_type_display }}</td>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.current_stock }}</td>
+                        <td>{{ item.unit }}</td>
+                        <td>KSh {{ item.total_value|floatformat:2 }}</td>
+                        <td>
+                            <a href="{% url 'inventory_edit' item.pk %}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'inventory_delete' item.pk %}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No inventory items yet. 
+        <a href="{% url 'inventory_create' %}">Add your first item</a>
+    </div>
+{% endif %}
+{% endblock %}

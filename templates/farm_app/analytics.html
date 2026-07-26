@@ -1,0 +1,132 @@
+{% extends 'farm_app/base.html' %}
+
+{% block title %}Analytics - Farm Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Farm Analytics</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Total Income</h6>
+                <h3 class="text-success">KSh {{ total_income|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Total Expenses</h6>
+                <h3 class="text-danger">KSh {{ total_expenses|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Total Profit</h6>
+                <h3 class="{% if total_profit >= 0 %}text-success{% else %}text-danger{% endif %}">KSh {{ total_profit|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Profit Margin</h6>
+                <h3 class="{% if total_profit >= 0 %}text-success{% else %}text-danger{% endif %}">{% if total_income > 0 %}{{ total_profit|floatformat:2|add:0|multiply:100|divide:total_income }}%{% else %}0%{% endif %}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Crops Performance</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="cropChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Livestock Performance</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="livestockChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    var cropData = {{ crop_data|safe }};
+    var livestockData = {{ livestock_data|safe }};
+    
+    if (cropData.length > 0) {
+        var cropCtx = document.getElementById('cropChart').getContext('2d');
+        new Chart(cropCtx, {
+            type: 'bar',
+            data: {
+                labels: cropData.map(c => c.name),
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: cropData.map(c => c.income),
+                        backgroundColor: '#6ba547'
+                    },
+                    {
+                        label: 'Expenses',
+                        data: cropData.map(c => c.expenses),
+                        backgroundColor: '#dc3545'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+    
+    if (livestockData.length > 0) {
+        var livestockCtx = document.getElementById('livestockChart').getContext('2d');
+        new Chart(livestockCtx, {
+            type: 'bar',
+            data: {
+                labels: livestockData.map(l => l.name),
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: livestockData.map(l => l.income),
+                        backgroundColor: '#6ba547'
+                    },
+                    {
+                        label: 'Expenses',
+                        data: livestockData.map(l => l.expenses),
+                        backgroundColor: '#dc3545'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
+{% endblock %}

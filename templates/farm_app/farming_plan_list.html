@@ -1,0 +1,46 @@
+{% extends 'farm_app/base.html' %}
+
+{% block title %}Farming Plans - Farm Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Farming Plans</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'farming_plan_create' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Create Plan
+        </a>
+    </div>
+</div>
+
+{% if plans %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Month</th>
+                    <th>Activity</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in plans %}
+                    <tr>
+                        <td>{{ plan.month|date:"M Y" }}</td>
+                        <td>{{ plan.activity }}</td>
+                        <td><span class="badge bg-info">{{ plan.get_status_display }}</span></td>
+                        <td>{{ plan.description|truncatewords:10 }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No farming plans yet. 
+        <a href="{% url 'farming_plan_create' %}">Create your first plan</a>
+    </div>
+{% endif %}
+{% endblock %}

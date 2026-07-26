@@ -1,0 +1,35 @@
+{% extends 'farm_app/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if action == 'Add' %}Create{% else %}Edit{% endif %} Farming Plan - Farm Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">{{ action }} Farming Plan</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'farming_plan_list' %}" class="btn btn-secondary w-100">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
